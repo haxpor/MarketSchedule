@@ -73,10 +73,14 @@ bool CMarketSchedule::Init() {
 	m_note_label.Color(color_info);
 	m_note_label.FontSize(8);
 
+	ChartRedraw(0);
+
 	return true;
 }
 
 void CMarketSchedule::Deinit() {
+	// we can either remove all objects via PREFIX_NAME
+	// but we do so by removing all individuals to not spend time in finding those objects with prefixed name
 	for (int i=0; i<7; i++) {
 		m_schedule_label[i].Delete();
 	}
