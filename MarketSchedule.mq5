@@ -7,8 +7,6 @@
 #property link      "https://wasin.io"
 #property version   "1.00"
 #property description "MarketSchedule displays market open/close time for each day throughout the week for current instrument as shown in the chart."
-#property description "The script doesn't automatically update itself across the market open/close time."
-#property description "User has to drop the script into the chart when needed."
 
 #include "MarketSchedule.mqh"
 
