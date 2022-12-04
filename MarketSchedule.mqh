@@ -55,13 +55,30 @@ bool CMarketSchedule::Init() {
 	for (int i=0; i<7; i++) {
 		m_schedule_label[i].Create(0, PREFIX_NAME + "-" + day_strs[i], 0, 6, y);
 
-		if (!SymbolInfoSessionTrade(Symbol(), dows[i], 0, trade_session_from, trade_session_to)) {
-			// market closed (not an error)
-			m_schedule_label[i].Description(day_strs[i] + " - market closed");
+		// assume possibility of maximum market sessions can be is 2
+		// e.g. it is a case for BTCUSD on certain broker that has a market break during the day for one hour.
+		// Thus is spans into 2 sessions in a single day. Normally there is just 1 session for most instruments.
+		//
+		// NOTE: if such instrument has more than 2 sessions per day, then we need to update `j` to be higher value.
+		string desc = day_strs[i];
+		for (int j=0; j<2; j++) {
+			if (!SymbolInfoSessionTrade(Symbol(), dows[i], j, trade_session_from, trade_session_to)) {
+				if (j == 0) {
+					// market closed (not an error)
+					desc += " - market closed";
+				}
+				break;
+			}
+			else {
+				if (j == 0) {
+					desc += " - " + TimeToString(trade_session_from, TIME_MINUTES | TIME_SECONDS) + "-" + TimeToString(trade_session_to, TIME_MINUTES | TIME_SECONDS);
+				}
+				else {
+					desc += ", " + TimeToString(trade_session_from, TIME_MINUTES | TIME_SECONDS) + "-" + TimeToString(trade_session_to, TIME_MINUTES | TIME_SECONDS);
+				}
+			}
 		}
-		else {
-			m_schedule_label[i].Description(day_strs[i] + " - " + TimeToString(trade_session_from, TIME_MINUTES | TIME_SECONDS) + "-" + TimeToString(trade_session_to, TIME_MINUTES | TIME_SECONDS));
-		}
+		m_schedule_label[i].Description(desc);
 
 		m_schedule_label[i].Color(color_info);
 		m_schedule_label[i].FontSize(8);
