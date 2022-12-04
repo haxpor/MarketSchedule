@@ -62,7 +62,7 @@ bool CMarketSchedule::Init() {
 		// NOTE: if such instrument has more than 2 sessions per day, then we need to update `j` to be higher value.
 		string desc = day_strs[i];
 		for (int j=0; j<2; j++) {
-			if (!SymbolInfoSessionTrade(Symbol(), dows[i], j, trade_session_from, trade_session_to)) {
+			if (!SymbolInfoSessionQuote(Symbol(), dows[i], j, trade_session_from, trade_session_to)) {
 				if (j == 0) {
 					// market closed (not an error)
 					desc += " - market closed";
