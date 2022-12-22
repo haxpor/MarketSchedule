@@ -21,6 +21,8 @@ public:
 protected:
 	// store maximum of days for the week for time open/close
 	CChartObjectLabel m_schedule_label[7];
+	// broker timezone line
+	CChartObjectLabel m_brokerTz_label;
 	// note line
 	CChartObjectLabel m_note_label;
 };
@@ -85,8 +87,20 @@ bool CMarketSchedule::Init() {
 		y += 16;
 	}
 
+	y += 10;
+
+	const int broker_tz = (int)((TimeTradeServer() - TimeGMT() + 1800)/3600);
+	string broker_tz_str = broker_tz >= 0 ? "+" + (string)broker_tz : "-" + (string)broker_tz;
+
+	m_brokerTz_label.Create(0, PREFIX_NAME + "-broker timezone", 0, 6, y);
+	m_brokerTz_label.Description("Broker timezone: " + broker_tz_str + " GMT");
+	m_brokerTz_label.Color(color_info);
+	m_brokerTz_label.FontSize(8);
+
+	y += 16;
+
 	m_note_label.Create(0, PREFIX_NAME + "-Timezone note", 0, 6, y);
-	m_note_label.Description("(Time zone bases on your broker)");
+	m_note_label.Description("(Times base on your broker's timezone)");
 	m_note_label.Color(color_info);
 	m_note_label.FontSize(8);
 
@@ -101,5 +115,6 @@ void CMarketSchedule::Deinit() {
 	for (int i=0; i<7; i++) {
 		m_schedule_label[i].Delete();
 	}
+	m_brokerTz_label.Delete();
 	m_note_label.Delete();
 }
