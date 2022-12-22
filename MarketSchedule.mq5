@@ -5,7 +5,7 @@
 //+------------------------------------------------------------------+
 #property copyright "Copyright 2022, haxpor."
 #property link      "https://wasin.io"
-#property version   "1.02"
+#property version   "1.03"
 #property description "MarketSchedule displays market open/close time for each day throughout the week for current instrument as shown in the chart."
 
 #include "MarketSchedule.mqh"
